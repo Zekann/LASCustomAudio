@@ -220,7 +220,7 @@ def audio_copy_file():
         if Emulator.get() == "Console":
             if not os.path.exists("%s/Console/%s" % (os.getcwd(), game_mods_folder)):
                 os.makedirs("%s/Console/%s" % (os.getcwd(), game_mods_folder))
-            shutil.copyfile("%s/converted/%s" % (os.getcwd(), file), "%s/Console/%s/%s" % (os.getcwd(), game_mods_folder ,file))
+            shutil.copyfile("%s/converted/%s" % (os.getcwd(), file), "%s/Console/%s/%s" % (os.getcwd(), game_mods_folder, file))
     tkinter.messagebox.showinfo("Info", "Audio file copied successfully")
 
 
