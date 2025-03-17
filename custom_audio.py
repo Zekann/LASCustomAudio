@@ -246,7 +246,7 @@ copy_audio.place(x=50, y=210)
 Emulator = customtkinter.CTkComboBox(app, values=["Yuzu", "Ryujinx", "Console"])
 Emulator.place(x=50, y=10)
 
-About = customtkinter.CTkLabel(app, text="Custom Sound for LAS\nVersion 0.1.0\nDeveloped by: Zekann & Nymfya", font=("Arial", 12))
+About = customtkinter.CTkLabel(app, text="Custom Sound for LAS\nVersion 0.1\nDeveloped by: Zekann & Nymfya", font=("Arial", 12))
 About.place(x=57, y=250)
 
 app.geometry("250x300")
