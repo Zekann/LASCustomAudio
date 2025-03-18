@@ -13,19 +13,25 @@ def set_audio_file(entry_file):
         return
     elif not path.endswith(".wav"):
         tkinter.messagebox.showinfo("Info", "This file will be converted to wav format")
-        convert = ["%s/tools/vgmstream-cli.exe" % os.getcwd(), "-l", "1", "-f", "0", "-L", "-o", "temp/convert.wav", "%s" % (path)]
-        subprocess.check_output(convert).decode("utf-8").strip()
+        if not os.path.exists("%s/temp" % os.getcwd()):
+            os.makedirs("%s/temp" % os.getcwd())
+        convert = ["%s/tools/vgmstream-cli.exe" % os.getcwd(), "-l", "1", "-f", "0", "-L", "-o", "%s/temp/convert.wav" % os.getcwd(), "%s" % (path)]
+        try:
+            subprocess.check_output(convert).decode("utf-8").strip()
+        except subprocess.CalledProcessError:
+            tkinter.messagebox.showerror("Error", "An error occurred while converting the audio file")
+            return
         file = "%s/temp/convert.wav" % os.getcwd()
         tkinter.messagebox.showinfo("Info", "Audio file converted successfully")
     entry_file.delete(0, tkinter.END)
     if os.path.isfile(file):
         entry_file.insert(0, file)
-    else:
-        entry_file.insert(0, path)
 
 
 def convert_audio_file(audio_file):
     if audio_file.get():
+        if not os.path.exists("%s/converted" % os.getcwd()):
+            os.makedirs("%s/converted" % os.getcwd())
         cmd = ["%s/tools/vgaudio.exe" % os.getcwd(), "--little-endian", "%s" % (audio_file.get()), "%s/converted/%s" % (os.getcwd(), music_value(combobox))]
         subprocess.check_output(cmd).decode("utf-8").strip()
         tkinter.messagebox.showinfo("Info", "Audio file converted successfully")
@@ -202,7 +208,6 @@ def music_value(combobox):
         return "86_ZeldaName.ry.48.dspadpcm.bfstm"
 
 
-
 def audio_copy_file():
     roaming_folder = os.getenv('appdata')
     game_mods_folder = "01006BB00C6F0000/Custom Audio/romfs/region_common/audio/stream"
@@ -229,7 +234,7 @@ customtkinter.set_default_color_theme("blue")
 
 app = customtkinter.CTk()
 
-combobox = customtkinter.CTkComboBox(app, values=[' Ecran de selection de fichier de sauvegarde', ' Première maison (Maison de Tarkin)', " Fanfare d'obtention d'item", ' Field First (?)', ' (?)', ' (?)', ' Fanfare Epée', ' Field Normal Intro (?)', ' Field Normal (?)', ' Meve (?)', ' Forêt étrange', ' Intro boost (Nuts)', ' Boost (Nuts)', ' Shop', ' Shop Rapide', ' Fée', ' Ouverture grotte', ' Shop du jeu', ' Maison (?)', ' Chanson de Marine', " Obtention d'item", ' Caverne', ' Donjon 1 (Tail Cave)', ' Donjon 2 (2D Cave)', ' Donjon Boss Middle', ' Donjon Boss', " Fanfare d'obtention d'instrument", ' Violon', ' Event Sauvetage de Bowwow', ' Event Sauvetage de Bowwow Intro', ' Wright', ' Donjon 2 (Pot Cave)', ' Cor', ' Richard', ' Event Singe', ' Donjon Chateau', ' Donjon Clé', ' Cloche', ' Event Abeille', ' Village des animaux', ' Maison de la chèvre', ' Entrée du rêve', ' Lit du rêve', ' Rêve', ' Event Marine sur la plage', ' Event Rendez-vous avec Marine', ' Ocarina Poisson du vent', ' TaruTaru', ' TaruTaru Après le sauvetage', ' Event Pêcheur ouvert', ' Donjon 4 (Pêcheur)', ' Harpe', ' Ocarina Manbo de Manbow', ' Maison hantée', ' Pêcheur', ' Donjon 5 (Poisson-chat)', ' Défaite', ' Marimba', ' Ocarina Âme de grenouille', ' Donjon 6 (Temple du visage)', ' Triangle', ' Donjon Vêtements', ' Résurrection du poulet', ' Maison du poulet', " Donjon 7 (Tour de l'aigle)", ' Donjon 7 (Boss event)', ' Orgue', ' Donjon 7 (Entrée de la bataille)', ' Donjon 7 (Rocher de la tortue)', ' Tambour', ' Rapides (Jeu de radeau)', ' Donjon Oeuf sacré', ' Dernier boss (Texte de démo)', ' Dernier boss (Apparition-Bataille)', ' Dernier boss (Victoire)', ' Démonstration après le dernier boss', ' Démonstration après le dernier boss (Plus de piste)', ' Fin', ' Game Over', " Titre (Pas d'intro)", ' Chanson de Totakeke', ' Nom de Zelda'])
+combobox = customtkinter.CTkComboBox(app, values=['Ecran de selection de fichier de sauvegarde', ' Première maison (Maison de Tarkin)', " Fanfare d'obtention d'item", ' Field First (?)', ' (?)', ' (?)', ' Fanfare Epée', ' Field Normal Intro (?)', ' Field Normal (?)', ' Meve (?)', ' Forêt étrange', ' Intro boost (Nuts)', ' Boost (Nuts)', ' Shop', ' Shop Rapide', ' Fée', ' Ouverture grotte', ' Shop du jeu', ' Maison (?)', ' Chanson de Marine', " Obtention d'item", ' Caverne', ' Donjon 1 (Tail Cave)', ' Donjon 2 (2D Cave)', ' Donjon Boss Middle', ' Donjon Boss', " Fanfare d'obtention d'instrument", ' Violon', ' Event Sauvetage de Bowwow', ' Event Sauvetage de Bowwow Intro', ' Wright', ' Donjon 2 (Pot Cave)', ' Cor', ' Richard', ' Event Singe', ' Donjon Chateau', ' Donjon Clé', ' Cloche', ' Event Abeille', ' Village des animaux', ' Maison de la chèvre', ' Entrée du rêve', ' Lit du rêve', ' Rêve', ' Event Marine sur la plage', ' Event Rendez-vous avec Marine', ' Ocarina Poisson du vent', ' TaruTaru', ' TaruTaru Après le sauvetage', ' Event Pêcheur ouvert', ' Donjon 4 (Pêcheur)', ' Harpe', ' Ocarina Manbo de Manbow', ' Maison hantée', ' Pêcheur', ' Donjon 5 (Poisson-chat)', ' Défaite', ' Marimba', ' Ocarina Âme de grenouille', ' Donjon 6 (Temple du visage)', ' Triangle', ' Donjon Vêtements', ' Résurrection du poulet', ' Maison du poulet', " Donjon 7 (Tour de l'aigle)", ' Donjon 7 (Boss event)', ' Orgue', ' Donjon 7 (Entrée de la bataille)', ' Donjon 7 (Rocher de la tortue)', ' Tambour', ' Rapides (Jeu de radeau)', ' Donjon Oeuf sacré', ' Dernier boss (Texte de démo)', ' Dernier boss (Apparition-Bataille)', ' Dernier boss (Victoire)', ' Démonstration après le dernier boss', ' Démonstration après le dernier boss (Plus de piste)', ' Fin', ' Game Over', " Titre (Pas d'intro)", ' Chanson de Totakeke', ' Nom de Zelda'])
 combobox.place(x=50, y=50)
 
 audio_path = customtkinter.CTkEntry(app)
@@ -247,11 +252,11 @@ Emulator = customtkinter.CTkComboBox(app, values=["Yuzu", "Ryujinx", "Console"])
 Emulator.place(x=50, y=10)
 
 About = customtkinter.CTkLabel(app, text="Custom Sound for LAS\nVersion 0.1\nDeveloped by: Zekann & Nymfya", font=("Arial", 12))
-About.place(x=57, y=250)
+About.place(x=30, y=250)
 
 app.geometry("250x300")
 app.title("Custom Sound for LAS")
 app.resizable(False, False)
-app.iconbitmap("%s/icon.ico" % os.getcwd())
+app.iconbitmap("%s/icone/icon.ico" % os.getcwd())
 
 app.mainloop()
